@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Header from './Header';
 import DonationItem from './DonationItem';
 import styled from 'styled-components';
+import { numberToText } from '../myModule';
+import db from '../firebase';
 
 const MainBlock = styled.div`
   display: flex;
@@ -9,7 +11,7 @@ const MainBlock = styled.div`
 
 const DonationListBlock = styled.div`
   flex: auto;
-  background-color: #f8f9fa;
+  background-color: #f9f9f9;
 
   .center {
     height: 5em;
@@ -20,64 +22,71 @@ const DonationListBlock = styled.div`
     font-size: 36px;
   }
 `;
-const dataArray = [
-  {
-    id: 1,
-    name: '유재석',
-    img:
-      'https://search.pstatic.net/common?type=a&size=120x150&quality=95&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F201808%2F20180828141741978.jpg',
-    org: '아름다운 재단',
-    amount: 100000000,
-    date: '2020.01.01',
-    link:
-      'https://news.naver.com/main/read.nhn?mode=LSD&mid=sec&sid1=106&oid=076&aid=0003514185'
-  },
-  {
-    id: 2,
-    name: '유재석',
-    img:
-      'https://search.pstatic.net/common?type=a&size=120x150&quality=95&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F201808%2F20180828141741978.jpg',
-    org: '아름다운 재단',
-    amount: 60000000,
-    date: '2019.01.01',
-    link:
-      'https://news.naver.com/main/read.nhn?mode=LSD&mid=sec&sid1=106&oid=076&aid=0003514185'
-  },
-  {
-    id: 3,
-    name: '유재석',
-    img:
-      'https://search.pstatic.net/common?type=a&size=120x150&quality=95&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F201808%2F20180828141741978.jpg',
-    org: '아름다운 재단',
-    amount: 7000000,
-    date: '2020.01.01',
-    link:
-      'https://news.naver.com/main/read.nhn?mode=LSD&mid=sec&sid1=106&oid=076&aid=0003514185'
-  }
-];
+
 class DonationList extends Component {
   state = {
-    donations: dataArray,
-    year: this.props.match.params.year || '2020'
+    donations: null,
+    year: this.props.match.params.year || 'all'
   };
 
+  loadData = async () => {
+    try {
+      console.log(`############로드데이터########`);
+      const year = this.state.year;
+
+      let resDonationData;
+      let donationRef = db.collection('donation');
+      if (year === 'all') {
+        resDonationData = await donationRef.orderBy('date', 'desc').get();
+      } else {
+        resDonationData = await donationRef
+          .where('date', '>=', `${year}0101`)
+          .where('date', '<=', `${year}1231`)
+          .orderBy('date', 'desc')
+          .get();
+      }
+
+      this.setState({
+        donations: resDonationData.docs.map(doc => {
+          // console.log(doc.id, '=>', doc.data());
+          return {
+            ...doc.data(),
+            id: doc.id
+          };
+        })
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
   render() {
-    console.log(this.state.year);
-    const { donations, year } = this.state;
+    const { donations } = this.state;
+    if (!donations) {
+      return (
+        <MainBlock>
+          <Header category={'donation'} />
+          <div></div>
+        </MainBlock>
+      );
+    }
+
     return (
       <MainBlock>
         <Header category={'donation'} />
         <DonationListBlock>
           <div className="center">
-            <b>12억 8천만원</b>
+            <b>{numberToText(205732190000)}</b>
           </div>
-          <div>시간순 금액순</div>
+          {/* <div>시간순 금액순</div> */}
 
-          {donations.map(data => {
-            if (year === data.date.substr(0, 4)) {
-              return <DonationItem key={data.id} {...data} />;
-            }
-            return null;
+          {donations.map(value => {
+            // return <div>{value.id}</div>;
+            return <DonationItem key={value.id} {...value} />;
           })}
         </DonationListBlock>
       </MainBlock>
