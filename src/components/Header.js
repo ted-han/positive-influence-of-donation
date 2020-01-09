@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const HeaderBlock = styled.div`
   flex-basis: 240px;
+  min-width: 150px;
   h2 {
     color: black;
   }
@@ -38,7 +39,7 @@ const ABlock = styled.a`
 `;
 
 const Header = ({ category }) => {
-  console.log('category: ' + category);
+  // console.log('category: ' + category);
 
   return (
     <HeaderBlock>
