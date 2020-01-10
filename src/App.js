@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import DonationLIst from './components/DonationList';
 import DetailInfo from './components/DetailInfo';
+import DetailStats from './components/DonationStats';
 import './App.css';
 
 const App = () => {
@@ -9,7 +10,7 @@ const App = () => {
     <div className="App">
       <Route path="/" exact={true} component={DonationLIst} />
       {/* <Route path="/:year" component={DonationLIst} /> */}
-      <Route path="/detail" exact={true} component={DetailInfo} />
+      <Route path="/stats" exact={true} component={DetailStats} />
       <Route path="/detail/:name" component={DetailInfo} />
     </div>
   );
