@@ -7,16 +7,17 @@ import db from '../firebase';
 
 const MainBlock = styled.div`
   display: flex;
+  height: 100%;
+  background-color: #f9f9f9;
 `;
 
 const DetailInfoBlock = styled.div`
   flex: auto;
-  background-color: #f9f9f9;
   padding: 80px;
   min-width: 800px;
+  margin-left: 240px;
 
   .detailTop {
-    /* border: solid red 1px; */
     text-align: center;
     padding-bottom: 80px;
     .imgBlock {
@@ -70,47 +71,51 @@ const DetailInfo = ({ match }) => {
   const [detailData, setDetailData] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const [items, setItems] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (name) {
       console.log(`############로드데이터########`);
       async function getDetailData() {
-        let sumAmount = 0;
-        let checkItems = false;
-        let resDetailData;
-        let donationRef = db.collection('donation');
-        resDetailData = await donationRef
-          .where('name', '==', name)
-          .orderBy('date', 'desc')
-          .get();
+        try {
+          let sumAmount = 0;
+          let checkItems = false;
+          let resDetailData;
+          let donationRef = db.collection('donation');
+          resDetailData = await donationRef
+            .where('name', '==', name)
+            .orderBy('date', 'desc')
+            .get();
 
-        setDetailData(
-          resDetailData.docs.map(doc => {
-            // console.log(doc.id, '=>', doc.data());
-            sumAmount += doc.data().amount;
-            if (doc.data().items) {
-              checkItems = true;
-            }
-            return {
-              ...doc.data(),
-              id: doc.id
-            };
-          })
-        );
-        setTotalAmount(sumAmount);
-        setItems(checkItems);
-        // console.log(detailData);
+          setDetailData(
+            resDetailData.docs.map(doc => {
+              // console.log(doc.id, '=>', doc.data());
+              sumAmount += doc.data().amount;
+              if (doc.data().items) {
+                checkItems = true;
+              }
+              return {
+                ...doc.data(),
+                id: doc.id
+              };
+            })
+          );
+          setTotalAmount(sumAmount);
+          setItems(checkItems);
+          // console.log(detailData);
+        } catch (error) {
+          console.log(error);
+        }
+        setLoading(true);
       }
       getDetailData();
     }
   }, []);
 
-  if (!name) {
+  if (!loading) {
     return (
       <MainBlock>
-        <Header category={'detail'} />
-        <div>
-          <div>정보가 없습니다.name </div>
-        </div>
+        <Header category={'stats'} />
+        <div></div>
       </MainBlock>
     );
   }
@@ -118,17 +123,17 @@ const DetailInfo = ({ match }) => {
   if (detailData.length === 0) {
     return (
       <MainBlock>
-        <Header category={'detail'} />
-        <div>
-          <div>정보가 없습니다.detail</div>
-        </div>
+        <Header category={'stats'} />
+        <DetailInfoBlock>
+          <div>정보가 없습니다.</div>
+        </DetailInfoBlock>
       </MainBlock>
     );
   }
 
   return (
     <MainBlock>
-      <Header category={'detail'} />
+      <Header category={'stats'} />
       <DetailInfoBlock>
         <div className="detailTop">
           <div className="imgBlock">
@@ -150,7 +155,7 @@ const DetailInfo = ({ match }) => {
                 <th>날짜</th>
                 <th>재단</th>
                 <th>금액 및 물품</th>
-                <th>기사</th>
+                <th>관련기사</th>
               </tr>
             </thead>
             <tbody>

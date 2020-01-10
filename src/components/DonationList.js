@@ -2,25 +2,19 @@ import React, { Component } from 'react';
 import Header from './Header';
 import DonationItem from './DonationItem';
 import styled from 'styled-components';
-import { numberToText } from '../myModule';
 import db from '../firebase';
 
 const MainBlock = styled.div`
   display: flex;
+  background-color: #f9f9f9;
+  height: 100%;
 `;
 
 const DonationListBlock = styled.div`
   flex: auto;
-  background-color: #f9f9f9;
-
-  .center {
-    height: 5em;
-    line-height: 5em;
-    background-color: black;
-    color: white;
-    text-align: center;
-    font-size: 36px;
-  }
+  padding-top: 50px;
+  padding-bottom: 100px;
+  margin-left: 240px;
 `;
 
 class DonationList extends Component {
@@ -70,7 +64,7 @@ class DonationList extends Component {
       return (
         <MainBlock>
           <Header category={'donation'} />
-          <div></div>
+          <div>aaaa</div>
         </MainBlock>
       );
     }
@@ -79,11 +73,6 @@ class DonationList extends Component {
       <MainBlock>
         <Header category={'donation'} />
         <DonationListBlock>
-          <div className="center">
-            <b>{numberToText(205732190000)}</b>
-          </div>
-          {/* <div>시간순 금액순</div> */}
-
           {donations.map(value => {
             // return <div>{value.id}</div>;
             return <DonationItem key={value.id} {...value} />;

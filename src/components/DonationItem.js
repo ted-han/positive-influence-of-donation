@@ -7,47 +7,56 @@ const DonationItemBlock = styled.div`
   display: flex;
   width: 960px;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 10px 0;
   border-bottom: solid #e6e6e6 1px;
+  height: 120px;
 
   .item-left {
-    padding: 10px 0;
+    /* border: solid red 1px; */
     flex: 2;
+    display: flex;
+    justify-content: center;
     img {
+      height: 100%;
       border-radius: 50%;
     }
   }
   .item-center {
+    /* border: solid red 1px; */
     flex: 8;
-    a {
-      text-decoration: none;
-      color: black;
-    }
+    margin: auto 0;
     p {
       margin-top: 0px;
-      margin-bottom: 5px;
-      line-height: 30px;
+      margin-bottom: 3px;
     }
     .item-center-name {
-      margin-top: 20px;
-      font-size: 30px;
+      font-size: 24px;
       font-weight: bold;
-      span {
-        font-size: 20px;
-        font-weight: normal;
+      margin-bottom: 16px;
+      a {
+        text-decoration: none;
+        color: black;
+        &:hover {
+          color: gray;
+        }
       }
     }
-    .item-center-amount {
-      font-size: 20px;
-    }
     .item-center-org {
+      font-size: 14px;
+      color: #868e96;
+      a {
+        color: #868e96;
+        text-decoration: none;
+        &:hover {
+          color: black;
+        }
+      }
     }
     .item-center-hashtag {
+      font-size: 14px;
       span {
-        background-color: #ebebeb;
-        /* cursor: pointer; */
-        margin-right: 7px;
-        padding: 1px;
+        color: #868e96;
+        margin-right: 4px;
       }
       span:hover {
         background-color: #fab005;
@@ -57,14 +66,15 @@ const DonationItemBlock = styled.div`
 
   .item-right {
     flex: 2;
-    text-align: right;
-    position: relative;
-    margin-bottom: 5px;
-    .item-center-date {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px;
+  }
+
+  span {
+    color: #e6e6e6;
   }
 `;
 
@@ -81,14 +91,22 @@ const DonationItem = obj => {
               pathname: '/detail/' + obj.name
             }}
           >
-            {obj.name} <span>{obj.items || numberToText(obj.amount)}</span>
+            {obj.name}
+            {/* <span>{obj.items || numberToText(obj.amount)}</span> */}
           </Link>
         </p>
-        {/* <p className="item-center-amount">
-          {obj.items || numberToText(obj.amount)}
-        </p> */}
-        <br />
-        <p className="item-center-org">{obj.org}</p>
+
+        <p className="item-center-org">
+          {obj.org} <span>|</span>{' '}
+          {`${String(obj.date).substr(2, 2)}.${String(obj.date).substr(
+            4,
+            2
+          )}.${String(obj.date).substr(6, 2)}`}{' '}
+          <span>|</span>{' '}
+          <a target="_blank" rel="noreferrer noopener" href={obj.link}>
+            관련기사
+          </a>
+        </p>
         <p className="item-center-hashtag">
           {obj.tag.map((value, idx) => (
             <span key={idx}>#{value}</span>
@@ -96,18 +114,7 @@ const DonationItem = obj => {
         </p>
       </div>
       <div className="item-right">
-        <p>
-          <a target="_blank" rel="noreferrer noopener" href={obj.link}>
-            관련기사보기
-          </a>
-        </p>
-        <div className="item-center-date">{`${String(obj.date).substr(
-          0,
-          4
-        )}-${String(obj.date).substr(4, 2)}-${String(obj.date).substr(
-          6,
-          2
-        )}`}</div>
+        <p>{obj.items || numberToText(obj.amount)}</p>
       </div>
     </DonationItemBlock>
   );
