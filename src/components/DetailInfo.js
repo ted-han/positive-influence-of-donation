@@ -7,13 +7,12 @@ import db from '../firebase';
 
 const MainBlock = styled.div`
   display: flex;
-  height: 100%;
   background-color: #f9f9f9;
 `;
 
 const DetailInfoBlock = styled.div`
   flex: auto;
-  padding: 80px;
+  padding: 80px 160px;
   min-width: 800px;
   margin-left: 240px;
 
@@ -29,11 +28,12 @@ const DetailInfoBlock = styled.div`
       }
     }
     .nameBlock {
-      font-size: 30px;
+      margin-top: 16px;
+      font-size: 32px;
       /* font-weight: bold; */
     }
     .totalBlock {
-      font-size: 35px;
+      font-size: 24px;
       /* font-weight: bold; */
     }
   }
@@ -143,7 +143,7 @@ const DetailInfo = ({ match }) => {
           <div className="totalBlock">
             {items
               ? totalAmount
-                ? numberToText(totalAmount) + ' + 물품기증'
+                ? numberToText(totalAmount) + ' + 기타'
                 : '물품기증'
               : numberToText(totalAmount)}
           </div>
@@ -155,15 +155,19 @@ const DetailInfo = ({ match }) => {
                 <th>날짜</th>
                 <th>재단</th>
                 <th>금액 및 물품</th>
+                <th>태그</th>
                 <th>관련기사</th>
               </tr>
             </thead>
             <tbody>
               {detailData.map(value => (
                 <tr key={value.id}>
-                  <td>{value.date}</td>
+                  <td>{`${String(value.date).substr(0, 4)}.${String(
+                    value.date
+                  ).substr(4, 2)}.${String(value.date).substr(6, 2)}`}</td>
                   <td>{value.org}</td>
                   <td>{value.items || numberToText(value.amount)}</td>
+                  <td>{value.tag.join(', ')}</td>
                   <td>
                     <a
                       target="_blank"
