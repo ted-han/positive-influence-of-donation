@@ -11,12 +11,24 @@ const DonationItemBlock = styled.div`
   border-bottom: solid #e6e6e6 1px;
   height: 120px;
 
+  .item-left-left {
+    /* border: solid red 1px; */
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #868e96;
+  }
+
   .item-left {
     /* border: solid red 1px; */
     flex: 2;
     display: flex;
     justify-content: center;
+    margin-right: 16px;
     img {
+      width: 120px;
       height: 100%;
       border-radius: 50%;
     }
@@ -81,6 +93,12 @@ const DonationItemBlock = styled.div`
 const DonationItem = obj => {
   return (
     <DonationItemBlock>
+      <div className="item-left-left">
+        {`${String(obj.date).substr(2, 2)}.${String(obj.date).substr(
+          4,
+          2
+        )}.${String(obj.date).substr(6, 2)}`}
+      </div>
       <div className="item-left">
         <img src={obj.img} alt={obj.name} />
       </div>
@@ -98,11 +116,6 @@ const DonationItem = obj => {
 
         <p className="item-center-org">
           {obj.org} <span>|</span>{' '}
-          {`${String(obj.date).substr(2, 2)}.${String(obj.date).substr(
-            4,
-            2
-          )}.${String(obj.date).substr(6, 2)}`}{' '}
-          <span>|</span>{' '}
           <a target="_blank" rel="noreferrer noopener" href={obj.link}>
             관련기사
           </a>
