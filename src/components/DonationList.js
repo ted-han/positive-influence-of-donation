@@ -7,7 +7,6 @@ import db from '../firebase';
 const MainBlock = styled.div`
   display: flex;
   background-color: #f9f9f9;
-  height: 100%;
 `;
 
 const DonationListBlock = styled.div`
@@ -31,7 +30,11 @@ class DonationList extends Component {
       let resDonationData;
       let donationRef = db.collection('donation');
       if (year === 'all') {
-        resDonationData = await donationRef.orderBy('date', 'desc').get();
+        // resDonationData = await donationRef.orderBy('date', 'desc').get();
+        resDonationData = await donationRef
+          .where('date', '>=', 20190101)
+          .orderBy('date', 'desc')
+          .get();
       } else {
         resDonationData = await donationRef
           .where('date', '>=', `${year}0101`)
