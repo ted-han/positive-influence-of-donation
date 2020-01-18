@@ -77,7 +77,12 @@ const Header = ({ category }) => {
             </li>
             <li key="2">
               <ABlock href="/stats" active={category === 'stats'}>
-                개인상세
+                기부순위
+              </ABlock>
+            </li>
+            <li key="3">
+              <ABlock href="/people/entertainer" active={category === 'people'}>
+                기부피플
               </ABlock>
             </li>
           </ul>
