@@ -9,11 +9,11 @@ import './App.css';
 const App = () => {
   return (
     <div className="App">
-      <Route path="/" exact={true} component={DonationLIst} />
-      {/* <Route path="/:year" component={DonationLIst} /> */}
-      <Route path="/stats" exact={true} component={DetailStats} />
-      <Route path="/detail/:name" component={DetailInfo} />
+      <Route path="/" exact={true} component={DonationPeople} />
       <Route path="/people/:job" component={DonationPeople} />
+      <Route path="/stats/:year" component={DetailStats} />
+      <Route path="/list" exact={true} component={DonationLIst} />
+      <Route path="/detail/:name" component={DetailInfo} />
     </div>
   );
 };

@@ -114,7 +114,7 @@ const DetailInfo = ({ match }) => {
   if (!loading) {
     return (
       <MainBlock>
-        <Header category={'stats'} />
+        <Header category={''} />
         <div></div>
       </MainBlock>
     );
@@ -123,7 +123,7 @@ const DetailInfo = ({ match }) => {
   if (detailData.length === 0) {
     return (
       <MainBlock>
-        <Header category={'stats'} />
+        <Header category={''} />
         <DetailInfoBlock>
           <div>정보가 없습니다.</div>
         </DetailInfoBlock>
@@ -133,7 +133,7 @@ const DetailInfo = ({ match }) => {
 
   return (
     <MainBlock>
-      <Header category={'stats'} />
+      <Header category={'people'} />
       <DetailInfoBlock>
         <div className="detailTop">
           <div className="imgBlock">
@@ -166,7 +166,9 @@ const DetailInfo = ({ match }) => {
                     value.date
                   ).substr(4, 2)}.${String(value.date).substr(6, 2)}`}</td>
                   <td>{value.org}</td>
-                  <td>{value.items || numberToText(value.amount)}</td>
+                  <td>
+                    {value.items} {numberToText(value.amount)}
+                  </td>
                   <td>{value.tag.join(', ')}</td>
                   <td>
                     <a

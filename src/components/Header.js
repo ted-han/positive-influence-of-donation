@@ -70,19 +70,19 @@ const Header = ({ category }) => {
 
         <nav>
           <ul>
-            <li key="1">
-              <ABlock href="/" active={category === 'donation'}>
-                기부내역
+            <li>
+              <ABlock href="/people/entertainer" active={category === 'people'}>
+                기부피플
               </ABlock>
             </li>
-            <li key="2">
-              <ABlock href="/stats" active={category === 'stats'}>
+            <li>
+              <ABlock href="/stats/2020" active={category === 'stats'}>
                 기부순위
               </ABlock>
             </li>
-            <li key="3">
-              <ABlock href="/people/entertainer" active={category === 'people'}>
-                기부피플
+            <li>
+              <ABlock href="/list" active={category === 'donation'}>
+                기부내역
               </ABlock>
             </li>
           </ul>

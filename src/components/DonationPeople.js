@@ -53,9 +53,7 @@ const DonationPeopleBlock = styled.div`
   }
 
   .order {
-    font-size: 12px;
-    margin: 20px 0 5px 20px;
-    color: #868e96;
+    margin-bottom: 5px;
   }
   .donationPeopleBtm {
     /* border: red 1px solid; */
@@ -64,10 +62,30 @@ const DonationPeopleBlock = styled.div`
     /* justify-content: center; */
   }
 `;
+
+const SpanBlock = styled.span`
+  font-size: 12px;
+  margin-left: 10px;
+  color: #868e96;
+  cursor: pointer;
+
+  &:hover {
+    color: black;
+  }
+  ${props =>
+    props.active &&
+    `
+    color: black;
+    &:hover {
+      color: black;
+    }
+  `};
+`;
+
 const ABlock = styled.a`
   color: black;
   text-decoration: none;
-  margin: 10px 20px 20px 20px;
+  margin: 10px 20px 30px 20px;
   display: block;
 
   &:hover {
@@ -96,8 +114,68 @@ const DonationPeople = ({ match, history, location }) => {
     setSearchName(e.target.value);
   };
 
-  const job = match.params.job;
-  const [peopleData, setPeopleData] = useState('');
+  const handleChangeSort = sort => {
+    if (sort === 'char') {
+      if (peopleData.sortChar) {
+        setPeopleData({
+          sort: 'char',
+          sortChar: !peopleData.sortChar,
+          list: {
+            [job]: peopleData.list[job].sort(function(a, b) {
+              if (a.name > b.name) {
+                return -1;
+              }
+              if (a.name < b.name) {
+                return 1;
+              }
+              // a must be equal to b
+              return 0;
+            })
+          }
+        });
+      } else {
+        setPeopleData({
+          sort: 'char',
+          sortChar: !peopleData.sortChar,
+          list: {
+            [job]: peopleData.list[job].sort(function(a, b) {
+              if (a.name > b.name) {
+                return 1;
+              }
+              if (a.name < b.name) {
+                return -1;
+              }
+              // a must be equal to b
+              return 0;
+            })
+          }
+        });
+      }
+    } else {
+      setPeopleData({
+        sort: 'amount',
+        sortChar: false,
+        list: {
+          [job]: peopleData.list[job].sort(function(a, b) {
+            if (a.amount > b.amount) {
+              return -1;
+            }
+            if (a.amount < b.amount) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+          })
+        }
+      });
+    }
+  };
+
+  const job = match.params.job || 'entertainer';
+  const [peopleData, setPeopleData] = useState({
+    sort: 'char',
+    sortChar: true
+  });
   const [searchName, setSearchName] = useState('');
 
   useEffect(() => {
@@ -112,14 +190,16 @@ const DonationPeople = ({ match, history, location }) => {
           .doc('people')
           .get();
 
-        setPeopleData(resPeopleData.data());
-        history.replace({ state: resPeopleData.data() });
+        setPeopleData({ ...peopleData, list: resPeopleData.data() });
+        history.replace({
+          state: { ...peopleData, list: resPeopleData.data() }
+        });
       }
       getPeopleData();
     }
   }, []);
 
-  if (!peopleData) {
+  if (!peopleData.list) {
     return (
       <MainBlock>
         <Header category={'people'} />
@@ -160,9 +240,22 @@ const DonationPeople = ({ match, history, location }) => {
           </div>
         </nav>
 
-        <div className="order">가나다순</div>
+        <div className="order">
+          <SpanBlock
+            onClick={() => handleChangeSort('char')}
+            active={peopleData.sort === 'char'}
+          >
+            가나다순
+          </SpanBlock>
+          <SpanBlock
+            onClick={() => handleChangeSort('amount')}
+            active={peopleData.sort === 'amount'}
+          >
+            금액순
+          </SpanBlock>
+        </div>
         <div className="donationPeopleBtm">
-          {peopleData[job]
+          {peopleData.list[job]
             .filter(value => value.name.indexOf(searchName) > -1)
             .map((value, idx) => (
               <DonationPeopleItem

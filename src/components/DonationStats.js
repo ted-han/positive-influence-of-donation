@@ -15,14 +15,30 @@ const DetailStatsBlock = styled.div`
   padding: 50px 150px;
   min-width: 800px;
   margin-left: 240px;
+  align-items: center;
 
-  .total {
-    font-weight: bold;
-    text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 1em;
+  .statsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
     color: blueviolet;
+
+    .total {
+      font-weight: bold;
+      text-align: center;
+      font-size: 32px;
+      margin: 0 10px;
+      div {
+        margin-bottom: -10px;
+      }
+      span {
+        font-size: 20px;
+        color: black;
+      }
+    }
   }
+
   .statsTop {
     display: flex;
     justify-content: space-between;
@@ -32,7 +48,7 @@ const DetailStatsBlock = styled.div`
     text-align: center;
     margin: 20px;
     width: 250px;
-    padding: 30px 40px 50px 40px;
+    padding: 20px 30px 35px 30px;
     background-color: white;
     cursor: pointer;
     &:hover {
@@ -58,13 +74,29 @@ const DetailStatsBlock = styled.div`
         border-radius: 50%;
       }
       .first {
-        background-color: gold;
+        background: linear-gradient(
+          to right,
+          #ffb347,
+          #ffb347,
+          #ffec99,
+          #ffcc33
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
       .second {
-        background-color: silver;
+        background: linear-gradient(
+          to right,
+          #ada996,
+          #f2f2f2,
+          #dbdbdb,
+          #eaeaea
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
       .third {
-        background-color: chocolate;
+        background: linear-gradient(
+          to right,
+          #ba8b02,
+          #181818
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
     }
     .topListName {
@@ -177,24 +209,34 @@ const DetailStatsBlock = styled.div`
   }
 `;
 
+const ABlock = styled.a`
+  color: #868e96;
+  text-decoration: none;
+  font-size: 20px;
+  &:hover {
+    color: black;
+  }
+  ${props =>
+    props.active &&
+    `
+    pointer-events:none;
+    cursor: default;
+  `};
+`;
+
 const DetailStats = ({ match, history }) => {
+  const year = match.params.year;
   const handleGoDetail = name => {
-    console.log(history);
+    // console.log(history);
     history.push('/detail/' + name);
   };
 
   const [searchName, setSearchName] = useState('');
   const [statsData, setStatsData] = useState('');
-  const [year, setYear] = useState('2019');
 
   const handleChange = e => {
     // console.log(e.target.value);
     setSearchName(e.target.value);
-  };
-
-  const handleClick = () => {
-    let go = year === '2019' ? '2020' : '2019';
-    setYear(go);
   };
 
   useEffect(() => {
@@ -223,12 +265,28 @@ const DetailStats = ({ match, history }) => {
     <MainBlock>
       <Header category={'stats'} />
       <DetailStatsBlock>
-        <div onClick={handleClick}>연도변경</div>
-        <div className="total">
-          <div>{year}</div>
-          <span role="img" aria-label="Search">
-            🧡🧡 {numberToText(statsData[year].total)} 🧡🧡
-          </span>
+        <div className="statsHeader">
+          <div className="changeYear">
+            <ABlock
+              href={`/stats/${parseInt(year) + 1}`}
+              active={year === '2020' ? true : false}
+            >
+              &lt;
+            </ABlock>
+          </div>
+          <div className="total">
+            <div>{year}</div>
+            <span role="img" aria-label="Search">
+              🧡 {numberToText(statsData[year].total)} 🧡
+            </span>
+          </div>
+
+          <ABlock
+            href={`/stats/${parseInt(year) - 1}`}
+            active={year === '2019' ? true : false}
+          >
+            &gt;
+          </ABlock>
         </div>
         <div className="statsTop">
           {statsData[year].list.map(value => {
