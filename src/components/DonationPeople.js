@@ -54,6 +54,32 @@ const DonationPeopleBlock = styled.div`
 
   .order {
     margin-bottom: 5px;
+
+    .statsMidInfo {
+      /* color: grey; */
+      margin: 0 15px -25px 15px;
+      font-size: 16px;
+      text-align: right;
+      position: relative;
+      display: inline-block;
+      cursor: default;
+    }
+    .tooltip {
+      width: 140px;
+      font-size: 12px;
+      visibility: hidden;
+      background-color: #f1f3f5;
+      border-radius: 6px;
+      padding: 3px;
+      position: absolute;
+      z-index: 1;
+      margin-top: 4px;
+      left: 105%;
+      text-align: center;
+    }
+    .statsMidInfo:hover .tooltip {
+      visibility: visible;
+    }
   }
   .donationPeopleBtm {
     /* border: red 1px solid; */
@@ -173,8 +199,8 @@ const DonationPeople = ({ match, history, location }) => {
 
   const job = match.params.job || 'entertainer';
   const [peopleData, setPeopleData] = useState({
-    sort: 'char',
-    sortChar: true
+    sort: location.state ? location.state.sort : 'char',
+    sortChar: location.state ? location.state.sortChar : true
   });
   const [searchName, setSearchName] = useState('');
 
@@ -191,13 +217,16 @@ const DonationPeople = ({ match, history, location }) => {
           .get();
 
         setPeopleData({ ...peopleData, list: resPeopleData.data() });
-        history.replace({
-          state: { ...peopleData, list: resPeopleData.data() }
-        });
       }
       getPeopleData();
     }
   }, []);
+
+  useEffect(() => {
+    history.replace({
+      state: { ...peopleData }
+    });
+  }, [history, peopleData]);
 
   if (!peopleData.list) {
     return (
@@ -208,6 +237,8 @@ const DonationPeople = ({ match, history, location }) => {
     );
   }
 
+  // console.log(history.location.state);
+  // console.log(peopleData);
   return (
     <MainBlock>
       <Header category={'people'} />
@@ -253,7 +284,12 @@ const DonationPeople = ({ match, history, location }) => {
           >
             금액순
           </SpanBlock>
+          <div className="statsMidInfo">
+            <span className="tooltip">2019년 이후 정보입니다.</span>
+            &#x2139;
+          </div>
         </div>
+
         <div className="donationPeopleBtm">
           {peopleData.list[job]
             .filter(value => value.name.indexOf(searchName) > -1)
