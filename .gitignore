@@ -22,8 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/.firebase
+
 /.vscode
 /src/firebase.js
 /src/good-effects-7b365b08420c.json
 /src/admin.js
+/public/sitemap.xml
+/public/googlec00f79f8ae32aee8.html
