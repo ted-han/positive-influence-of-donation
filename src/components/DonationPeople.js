@@ -132,7 +132,10 @@ const DonationPeople = ({ match, history, location }) => {
   // console.log(location.state);
   // console.log(history);
   const handleGoDetail = name => {
-    // console.log(history);
+    // console.log(window.scrollY); // 현재 스크롤 높이
+    history.replace({
+      state: { ...peopleData, scrollY: window.scrollY }
+    });
     history.push('/detail/' + name);
   };
   const handleChange = e => {
@@ -226,9 +229,11 @@ const DonationPeople = ({ match, history, location }) => {
     history.replace({
       state: { ...peopleData }
     });
+    console.log('히스토리 업데이트');
   }, [history, peopleData]);
 
   if (!peopleData.list) {
+    console.log('render2');
     return (
       <MainBlock>
         <Header category={'people'} />
@@ -237,8 +242,17 @@ const DonationPeople = ({ match, history, location }) => {
     );
   }
 
-  // console.log(history.location.state);
-  // console.log(peopleData);
+  console.log('render');
+  if (location.state.scrollY) {
+    // const scrollHeight = document.getElementById('root').scrollHeight;
+    // const clientHeight = document.getElementById('root').clientHeight;
+    // const scrollY = window.scrollY;
+    window.scrollTo(0, location.state.scrollY);
+
+    history.replace({
+      state: { ...peopleData, scrollY: 0 }
+    });
+  }
   return (
     <MainBlock>
       <Header category={'people'} />
