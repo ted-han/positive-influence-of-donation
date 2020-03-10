@@ -12,13 +12,13 @@ const MainBlock = styled.div`
 
 const DetailInfoBlock = styled.div`
   flex: auto;
-  padding: 80px 160px;
+  padding: 40px 160px 80px;
   min-width: 800px;
   margin-left: 240px;
 
   .detailTop {
     text-align: center;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
     .imgBlock {
       margin: 0 auto;
       width: 160px;
@@ -48,7 +48,7 @@ const DetailInfoBlock = styled.div`
     }
     th {
       border: 1px solid black;
-      background-color: #5f3dc4;
+      background-color: #00796b;
       color: white;
       height: 20px;
       padding: 5px;
@@ -83,6 +83,7 @@ const DetailInfo = ({ match }) => {
           let donationRef = db.collection('donation');
           resDetailData = await donationRef
             .where('name', '==', name)
+            .where('date', '>=', 20190101)
             .orderBy('date', 'desc')
             .get();
 
@@ -144,7 +145,7 @@ const DetailInfo = ({ match }) => {
             {items
               ? totalAmount
                 ? numberToText(totalAmount) + ' + 기타'
-                : '물품기증'
+                : '기부활동'
               : numberToText(totalAmount)}
           </div>
         </div>
