@@ -58,6 +58,15 @@ const ABlock = styled.a`
   `};
 `;
 
+const TagBlock = styled.a`
+  font-size: 16px;
+
+  color: #868e96;
+  &:hover {
+    color: black;
+  }
+`;
+
 const Header = ({ category }) => {
   // console.log('category: ' + category);
 
@@ -86,6 +95,9 @@ const Header = ({ category }) => {
               </ABlock>
             </li>
           </ul>
+          <hr />
+          <TagBlock href="/event/covid19">#코로나19</TagBlock>
+          <TagBlock href="/event/gangwonfire">#강원도산불</TagBlock>
         </nav>
       </div>
 
