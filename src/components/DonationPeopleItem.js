@@ -34,7 +34,7 @@ const DonationPeopleItem = ({ obj, onClick }) => {
       </div>
       <div className="item-right">
         <h3>{obj.name}</h3>
-        <p>{numberToText(obj.amount) || '자선활동'}</p>
+        <p>{numberToText(obj.amount) || '기부활동'}</p>
       </div>
     </DonationPeopleItemBlock>
   );
