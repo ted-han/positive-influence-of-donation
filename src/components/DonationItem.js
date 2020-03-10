@@ -69,6 +69,10 @@ const DonationItemBlock = styled.div`
       span {
         color: #868e96;
         margin-right: 4px;
+        a {
+          color: #868e96;
+          text-decoration: none;
+        }
       }
       span:hover {
         background-color: #fab005;
@@ -121,9 +125,23 @@ const DonationItem = obj => {
           </a>
         </p>
         <p className="item-center-hashtag">
-          {obj.tag.map((value, idx) => (
-            <span key={idx}>#{value}</span>
-          ))}
+          {obj.tag.map((value, idx) => {
+            if (value === '코로나19') {
+              return (
+                <span key={idx}>
+                  <a href="/event/covid19">#{value}</a>
+                </span>
+              );
+            } else if (value === '강원도산불') {
+              return (
+                <span key={idx}>
+                  <a href="/event/gangwonfire">#{value}</a>
+                </span>
+              );
+            }
+            return <span key={idx}>#{value}</span>;
+            // <span key={idx}>#{value}</span>
+          })}
         </p>
       </div>
       <div className="item-right">
