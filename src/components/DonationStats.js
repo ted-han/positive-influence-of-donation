@@ -357,7 +357,7 @@ const DetailStats = ({ match, history }) => {
                   <div className="btmListBlank"></div>
                   <div className="btmListCnt">{value.cnt}회</div>
                   <div className="btmListAmount">
-                    {numberToText(value.amount) || '자선활동'}
+                    {numberToText(value.amount) || '기부활동'}
                   </div>
                 </div>
               );
